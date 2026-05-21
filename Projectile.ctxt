@@ -1,0 +1,13 @@
+#BlueJ class context
+comment0.target=Projectile
+comment1.params=type
+comment1.target=Projectile(java.lang.String)
+comment2.params=
+comment2.target=void\ act()
+comment3.params=
+comment3.target=void\ createImage()
+comment4.params=
+comment4.target=void\ setSpeed()
+comment5.params=
+comment5.target=void\ checkHit()
+numComments=6
