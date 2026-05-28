@@ -4,7 +4,7 @@ public class Enemy extends Actor
 {
     int speed = 2;
     int health = 3;
-    
+
     GreenfootImage normalImage;
     int flashTimer = 0;
 
@@ -19,7 +19,7 @@ public class Enemy extends Actor
     {
         GreenfootImage img = getImage();
         img.scale(100, 100);
-        
+
         normalImage = new GreenfootImage(img);
         setImage(img);
     }
@@ -42,7 +42,6 @@ public class Enemy extends Actor
 
         if (players.isEmpty())
         {
-            Greenfoot.stop();
             return;
         }
 
@@ -75,13 +74,13 @@ public class Enemy extends Actor
             getY() + moveY * speed + randomOffsetY
         );
     }
-    
+
     public void handleFlash()
     {
         if (flashTimer > 0)
         {
             flashTimer--;
-    
+
             if (flashTimer == 0)
             {
                 setImage(normalImage);
@@ -125,12 +124,13 @@ public class Enemy extends Actor
     public void attackFan()
     {
         Greenfoot.playSound("Abanico.wav");
+
         java.util.List<Robot> players = getWorld().getObjects(Robot.class);
         if (players.isEmpty()) return;
 
         Robot player = players.get(0);
 
-        int baseAngle = (int) Math.toDegrees(Math.atan2(
+        int baseAngle = (int)Math.toDegrees(Math.atan2(
             player.getY() - getY(),
             player.getX() - getX()
         ));
@@ -146,6 +146,7 @@ public class Enemy extends Actor
     public void attackLaser()
     {
         Greenfoot.playSound("Disparo.wav");
+
         java.util.List<Robot> players = getWorld().getObjects(Robot.class);
         if (players.isEmpty()) return;
 
@@ -154,7 +155,7 @@ public class Enemy extends Actor
         Projectile p = new Projectile("purple");
         getWorld().addObject(p, getX(), getY());
 
-        int angle = (int) Math.toDegrees(Math.atan2(
+        int angle = (int)Math.toDegrees(Math.atan2(
             player.getY() - getY(),
             player.getX() - getX()
         ));
@@ -169,7 +170,7 @@ public class Enemy extends Actor
 
         Robot player = players.get(0);
 
-        burstAngle = (int) Math.toDegrees(Math.atan2(
+        burstAngle = (int)Math.toDegrees(Math.atan2(
             player.getY() - getY(),
             player.getX() - getX()
         ));
@@ -181,7 +182,6 @@ public class Enemy extends Actor
 
     public void handleBurst()
     {
-        Greenfoot.playSound("Rafaga.wav");
         if (burstShots <= 0)
         {
             isBursting = false;
@@ -190,12 +190,14 @@ public class Enemy extends Actor
 
         if (burstDelay == 0)
         {
+            Greenfoot.playSound("Rafaga.wav");
+
             Projectile p = new Projectile("green");
             getWorld().addObject(p, getX(), getY());
             p.setRotation(burstAngle);
 
             burstShots--;
-            burstDelay = 10; // 🔥 velocidad de la ráfaga
+            burstDelay = 10;
         }
         else
         {
@@ -206,17 +208,27 @@ public class Enemy extends Actor
     public void takeDamage(int dmg)
     {
         health -= dmg;
-        
+
         GreenfootImage flash = new GreenfootImage(normalImage);
         flash.setColor(new Color(255, 0, 0, 120));
         flash.fill();
+
         setImage(flash);
         flashTimer = 5;
 
         if (health <= 0 && getWorld() != null)
         {
+            World world = getWorld();
+
             Greenfoot.playSound("Corto.wav");
-            getWorld().removeObject(this);
+
+            world.removeObject(this);
+
+            if (world.getObjects(Enemy.class).isEmpty())
+            {
+                world.showText("VICTORY!", world.getWidth()/2, world.getHeight()/2);
+                Greenfoot.stop();
+            }
         }
     }
 }

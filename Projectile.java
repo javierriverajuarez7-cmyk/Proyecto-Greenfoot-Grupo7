@@ -61,7 +61,7 @@ public class Projectile extends Actor
 
     public void checkHit()
     {
-        Robot player = (Robot) getOneIntersectingObject(Robot.class);
+        Robot player = (Robot)getOneIntersectingObject(Robot.class);
 
         if (player != null)
         {

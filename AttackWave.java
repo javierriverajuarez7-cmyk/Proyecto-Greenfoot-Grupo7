@@ -22,7 +22,7 @@ public class AttackWave extends Actor
 
     public void act()
     {
-        if (owner != null)
+        if (owner != null && owner.getWorld() != null)
         {
             setLocation(owner.getX(), owner.getY());
         }
